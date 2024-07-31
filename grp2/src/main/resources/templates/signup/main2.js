@@ -14,5 +14,3 @@ function dateTimer() {
 dateTimer();
 
 setInterval(dateTimer, 1000);
-
-

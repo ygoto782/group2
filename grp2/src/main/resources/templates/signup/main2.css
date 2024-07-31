@@ -1,5 +1,5 @@
 .topMenu{
-       color: red;
+  color: red;
 }
 body{
   height: 700px;
@@ -10,12 +10,13 @@ body{
   margin-bottom: 10px;
 }
 .linkBox{
-  height: 60%;
+  height: 70%;
 }
 .linkBox1{
   display: flex;
   justify-content: space-between;
-  margin: 2% 20%;
+  margin: 1.4% 20%;
+
 }
 
 .userBox{
@@ -34,11 +35,14 @@ body{
   justify-content: space-around;
   align-items: flex-end;
 }
+
 input{
   display: flex;
 }
 
-
+.message{
+  text-align: center;
+}
 .selectButton{
   margin: 0% 35%;
   text-align: center;
@@ -54,5 +58,4 @@ footer{
 
 }
 
-
-
+  
