@@ -14,3 +14,8 @@ function dateTimer() {
 dateTimer(); // ページロード時に一度実行
 
 setInterval(dateTimer, 1000); // 1秒ごとに更新
+
+
+function goBack() {
+    window.history.back();
+}

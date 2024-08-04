@@ -19,7 +19,7 @@ public class SearchController {
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 
-    @GetMapping("/search")
+    @GetMapping("/search1")
     public String search(
             @RequestParam(value = "id", defaultValue = "") String idStr,
             @RequestParam(value = "age_start", defaultValue = "") String ageStartStr,
@@ -49,26 +49,28 @@ public class SearchController {
 
         if (errors.length() > 0) {
             model.addAttribute("error", errors.toString());
-            return "search";
+            return "search1"; // 修正: テンプレート名を "search1" に変更
         }
 
-        List<Meibo> meiboList = searchService.search(id != null ? id : 0, 
-                                                     ageStart != null ? ageStart : 0, 
-                                                     ageEnd != null ? ageEnd : 0, 
-                                                     name, 
-                                                     sdateStart, 
-                                                     sdateEnd, 
-                                                     edateStart, 
-                                                     edateEnd);
+        List<Meibo> meiboList = searchService.search(
+            id != null ? id : 0, 
+            ageStart != null ? ageStart : 0, 
+            ageEnd != null ? ageEnd : 0, 
+            name, 
+            sdateStart, 
+            sdateEnd, 
+            edateStart, 
+            edateEnd
+        );
         model.addAttribute("meiboList", meiboList);
         model.addAttribute("count", meiboList.size());
 
-        return "search";
+        return "search1"; // 修正: テンプレート名を "search1" に変更
     }
 
     private Integer parseId(String idStr, StringBuilder errors) {
         try {
-            return idStr.isEmpty() ? null : Integer.parseInt(idStr);
+            return idStr.isEmpty() ? null : Integer.valueOf(idStr);
         } catch (NumberFormatException e) {
             errors.append("社員IDは数値のみ許可されます。<br>");
             return null;
@@ -77,9 +79,9 @@ public class SearchController {
 
     private Integer parseInteger(String valueStr, StringBuilder errors, String fieldName) {
         try {
-            return valueStr.isEmpty() ? null : Integer.parseInt(valueStr);
+            return valueStr.isEmpty() ? null : Integer.valueOf(valueStr);
         } catch (NumberFormatException e) {
-            errors.append(fieldName + "は数値のみ許可されます。<br>");
+            errors.append(fieldName).append("は数値のみ許可されます。<br>");
             return null;
         }
     }
@@ -88,7 +90,7 @@ public class SearchController {
         try {
             return dateStr.isEmpty() ? null : LocalDate.parse(dateStr, DATE_FORMATTER);
         } catch (DateTimeParseException e) {
-            errors.append(fieldName + "の形式はyyyy/MM/ddでなければなりません。<br>");
+            errors.append(fieldName).append("の形式はyyyy/MM/ddでなければなりません。<br>");
             return null;
         }
     }
@@ -101,7 +103,7 @@ public class SearchController {
 
     private void validateDateRange(LocalDate startDate, LocalDate endDate, StringBuilder errors, String fieldName) {
         if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
-            errors.append(fieldName + "の範囲が正しくありません。<br>");
+            errors.append(fieldName).append("の範囲が正しくありません。<br>");
         }
     }
 }

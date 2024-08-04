@@ -1,7 +1,5 @@
 package com.example.demo;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,22 +53,19 @@ public class SearchService {
             params.add(java.sql.Date.valueOf(edateEnd));
         }
 
-        // RowMapperの実装
-        RowMapper<Meibo> rowMapper = new RowMapper<Meibo>() {
-            @Override
-            public Meibo mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Meibo meibo = new Meibo();
-                meibo.setId(rs.getInt("id"));
-                meibo.setName(rs.getString("name"));
-                meibo.setAge(rs.getInt("age"));
-                meibo.setSdate(rs.getDate("sdate") != null ? rs.getDate("sdate").toLocalDate() : null);
-                meibo.setEdate(rs.getDate("edate") != null ? rs.getDate("edate").toLocalDate() : null);
-                meibo.setPassword(rs.getString("password"));
-                return meibo;
-            }
+        // RowMapperのラムダ式実装
+        RowMapper<Meibo> rowMapper = (rs, rowNum) -> {
+            Meibo meibo = new Meibo();
+            meibo.setId(rs.getInt("id"));
+            meibo.setName(rs.getString("name"));
+            meibo.setAge(rs.getInt("age"));
+            meibo.setSdate(rs.getDate("sdate") != null ? rs.getDate("sdate").toLocalDate() : null);
+            meibo.setEdate(rs.getDate("edate") != null ? rs.getDate("edate").toLocalDate() : null);
+            meibo.setPassword(rs.getString("password"));
+            return meibo;
         };
 
-        // queryメソッドを使用
-        return jdbcTemplate.query(sql, params.toArray(), rowMapper);
+        // queryメソッドを使用 (非推奨のメソッドを避ける)
+        return jdbcTemplate.query(sql, rowMapper, params.toArray());
     }
 }
