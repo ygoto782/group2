@@ -1,0 +1,37 @@
+body{
+    height: 700px;
+}
+.all{
+    height: 60%;
+    border-bottom: 1px solid black;
+    margin-bottom: 10px;
+}
+.linkBox{
+    height: 60%;
+}
+.linkBox1{
+    display: flex;
+    justify-content: space-between;
+    margin: 2% 20%;
+}
+
+
+.linkBox1{
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+}
+input{
+    display: flex;
+}
+
+
+.selectButton{
+    margin: 0% 35%;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+}
+button{
+    padding: 10px 20px;
+}
