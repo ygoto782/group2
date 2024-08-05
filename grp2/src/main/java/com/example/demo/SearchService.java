@@ -15,7 +15,7 @@ public class SearchService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<Meibo> search(int id, Integer ageStart, Integer ageEnd, String name, LocalDate sdateStart, LocalDate sdateEnd, LocalDate edateStart, LocalDate edateEnd) {
+    public List<MeiboForm> search(int id, Integer ageStart, Integer ageEnd, String name, LocalDate sdateStart, LocalDate sdateEnd, LocalDate edateStart, LocalDate edateEnd) {
         String sql = "SELECT * FROM meibo WHERE 1=1";
 
         // 動的にクエリを組み立てる
@@ -54,8 +54,8 @@ public class SearchService {
         }
 
         // RowMapperのラムダ式実装
-        RowMapper<Meibo> rowMapper = (rs, rowNum) -> {
-            Meibo meibo = new Meibo();
+        RowMapper<MeiboForm> rowMapper = (rs, rowNum) -> {
+            MeiboForm meibo = new MeiboForm();
             meibo.setId(rs.getInt("id"));
             meibo.setName(rs.getString("name"));
             meibo.setAge(rs.getInt("age"));

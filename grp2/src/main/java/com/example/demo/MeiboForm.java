@@ -3,7 +3,7 @@ package com.example.demo;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Meibo {
+public class MeiboForm {
     
     private int id;
     private String name;
@@ -65,7 +65,7 @@ public class Meibo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Meibo meibo = (Meibo) o;
+        MeiboForm meibo = (MeiboForm) o;
         return id == meibo.id &&
                 age == meibo.age &&
                 Objects.equals(name, meibo.name) &&

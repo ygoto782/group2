@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/search/search1.css">
-    <link rel="stylesheet" href="../static/css/search/search1.css">
-    
+	<link rel="stylesheet" href="../static/css/search/search1.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員情報検索</title>
 </head>
@@ -18,38 +17,38 @@
     </div>
     <div class="topBox">
         <div class="topBox1">
-            <a href="./main1.html">メニュー</a>
+            <a href="/main1">メニュー</a>
         </div>
         <div class="topBox2">
-            <a href="./signup1.html">登録</a>
+            <a href="/signup1">登録</a>
         </div>
     </div>
 
     <div class="main">
-        <form action="/search" method="get">
+        <form id="searchForm" action="/search" method="get">
             <div class="onetwo">
                 <div class="t-left">
                     <div class="end">
                         <span>社員ID</span>
-                        <input class="te" type="text" name="id"><!-- value="${id}" -->
+                        <input class="te" type="text" name="id" id="id" pattern="\d*" title="数値のみ">
                         <span>年齢</span>
-                        <input class="te" type="text" name="age_start"><!-- value="${ageStart}" -->
+                        <input class="te" type="text" name="age_start" id="age_start" pattern="\d*" title="数値のみ">
                         <span>～</span>
-                        <input class="te" type="text" name="age_end"><!-- value="${ageEnd}" -->
+                        <input class="te" type="text" name="age_end" id="age_end" pattern="\d*" title="数値のみ">
                     </div>
                     <div class="end">
                         <span>社員名</span>
-                        <input class="te" type="text" name="name"><!-- value="${name}" -->
+                        <input class="te" type="text" name="name" id="name">
                         <span>開始日</span>
-                        <input class="te" type="text" name="sdate_start"><!-- value="${sdateStart}" -->
+                        <input class="te" type="text" name="sdate_start" id="sdate_start" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
                         <span>～</span>
-                        <input class="te" type="text" name="sdate_end"><!-- value="${sdateEnd}" -->
+                        <input class="te" type="text" name="sdate_end" id="sdate_end" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
                     </div>
                     <div class="end">
                         <span>終了日</span>
-                        <input class="te" type="text" name="edate_start"><!-- value="${edateStart}" -->
+                        <input class="te" type="text" name="edate_start" id="edate_start" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
                         <span>～</span>
-                        <input class="te" type="text" name="edate_end"><!-- value="${edateEnd}" -->
+                        <input class="te" type="text" name="edate_end" id="edate_end" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
                     </div>
                 </div>
                 <div class="t-right">
@@ -89,14 +88,44 @@
                 </table>
             </div>
             <div class="d-right">
-                <a href="./delete1.html">削除</a>
+                <a href="/delete1">削除</a>
             </div>
         </div>
     </div>
+    <script src="/js/timer.js"></script>
+	<script src="../static/js/timer.js"></script>
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            var ageStart = document.getElementById('age_start').value;
+            var ageEnd = document.getElementById('age_end').value;
+            var sdateStart = document.getElementById('sdate_start').value;
+            var sdateEnd = document.getElementById('sdate_end').value;
+            var edateStart = document.getElementById('edate_start').value;
+            var edateEnd = document.getElementById('edate_end').value;
+            var errors = [];
 
-    <script src="../static/js/timer.js"></script>
+            if (parseInt(ageStart) > parseInt(ageEnd) && ageEnd !== '') {
+                errors.push('年齢の開始値は終了値を上回ってはいけません。');
+            }
 
+            if (new Date(sdateStart) > new Date(sdateEnd) && sdateEnd !== '') {
+                errors.push('開始日の開始値は終了値を上回ってはいけません。');
+            }
 
+            if (new Date(edateStart) > new Date(edateEnd) && edateEnd !== '') {
+                errors.push('終了日の開始値は終了値を上回ってはいけません。');
+            }
+
+            if (errors.length > 0) {
+                alert('入力エラー:\n' + errors.join('\n'));
+                event.preventDefault(); // フォームの送信を防ぐ
+            }
+        });
+
+        function clearForm() {
+            document.getElementById('searchForm').reset();
+        }
+    </script>
 </body>
 <footer>
     <div class="other"><h6>group2🄫2024</h6></div>
