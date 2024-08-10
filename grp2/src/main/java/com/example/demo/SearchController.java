@@ -16,7 +16,7 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
-    @GetMapping("/search1")
+    @GetMapping("/search")
     public String getSearch(
             @RequestParam(name = "id", defaultValue = "0") int id,
             @RequestParam(name = "name", required = false) String name,
