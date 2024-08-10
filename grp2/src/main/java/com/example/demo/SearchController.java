@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -17,93 +16,62 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-
     @GetMapping("/search1")
-    public String search(
-            @RequestParam(value = "id", defaultValue = "") String idStr,
-            @RequestParam(value = "age_start", defaultValue = "") String ageStartStr,
-            @RequestParam(value = "age_end", defaultValue = "") String ageEndStr,
-            @RequestParam(value = "name", defaultValue = "") String name,
-            @RequestParam(value = "sdate_start", defaultValue = "") String sdateStartStr,
-            @RequestParam(value = "sdate_end", defaultValue = "") String sdateEndStr,
-            @RequestParam(value = "edate_start", defaultValue = "") String edateStartStr,
-            @RequestParam(value = "edate_end", defaultValue = "") String edateEndStr,
+    public String getSearch(
+            @RequestParam(name = "id", defaultValue = "0") int id,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "ageStart", required = false) Integer ageStart,
+            @RequestParam(name = "ageEnd", required = false) Integer ageEnd,
+            @RequestParam(name = "sdateStart", required = false) String sdateStart,
+            @RequestParam(name = "sdateEnd", required = false) String sdateEnd,
+            @RequestParam(name = "edateStart", required = false) String edateStart,
+            @RequestParam(name = "edateEnd", required = false) String edateEnd,
             Model model) {
 
-        // バリデーション
-        StringBuilder errors = new StringBuilder();
-        Integer id = parseId(idStr, errors);
-        Integer ageStart = parseInteger(ageStartStr, errors, "年齢");
-        Integer ageEnd = parseInteger(ageEndStr, errors, "年齢");
+        // 入力チェックと変換
+        String errorMessage = validateInputs(ageStart, ageEnd, sdateStart, sdateEnd, edateStart, edateEnd);
 
-        validateAgeRange(ageStart, ageEnd, errors);
+        if (errorMessage != null) {
+            model.addAttribute("meiboList", null);
+            model.addAttribute("count", 0);
+            model.addAttribute("errorMessage", errorMessage);
+        } else {
+            List<MeiboForm> results;
+            try {
+                LocalDate sdateStartLocal = sdateStart != null ? LocalDate.parse(sdateStart) : null;
+                LocalDate sdateEndLocal = sdateEnd != null ? LocalDate.parse(sdateEnd) : null;
+                LocalDate edateStartLocal = edateStart != null ? LocalDate.parse(edateStart) : null;
+                LocalDate edateEndLocal = edateEnd != null ? LocalDate.parse(edateEnd) : null;
 
-        LocalDate sdateStart = parseDate(sdateStartStr, errors, "開始日");
-        LocalDate sdateEnd = parseDate(sdateEndStr, errors, "開始日");
-        LocalDate edateStart = parseDate(edateStartStr, errors, "終了日");
-        LocalDate edateEnd = parseDate(edateEndStr, errors, "終了日");
-
-        validateDateRange(sdateStart, sdateEnd, errors, "開始日");
-        validateDateRange(edateStart, edateEnd, errors, "終了日");
-
-        if (errors.length() > 0) {
-            model.addAttribute("error", errors.toString());
-            return "search1"; // 修正: テンプレート名を "search1" に変更
+                results = searchService.search(id, name, ageStart, ageEnd, sdateStartLocal, sdateEndLocal, edateStartLocal, edateEndLocal);
+                model.addAttribute("meiboList", results);
+                model.addAttribute("count", results.size());
+                model.addAttribute("errorMessage", null); // エラーメッセージは無し
+            } catch (Exception e) {
+                model.addAttribute("meiboList", null);
+                model.addAttribute("count", 0);
+                model.addAttribute("errorMessage", "検索処理中にエラーが発生しました。");
+            }
         }
-
-        List<Meibo> meiboList = searchService.search(
-            id != null ? id : 0, 
-            ageStart != null ? ageStart : 0, 
-            ageEnd != null ? ageEnd : 0, 
-            name, 
-            sdateStart, 
-            sdateEnd, 
-            edateStart, 
-            edateEnd
-        );
-        model.addAttribute("meiboList", meiboList);
-        model.addAttribute("count", meiboList.size());
-
-        return "search1"; // 修正: テンプレート名を "search1" に変更
+        return "search1";
     }
 
-    private Integer parseId(String idStr, StringBuilder errors) {
-        try {
-            return idStr.isEmpty() ? null : Integer.valueOf(idStr);
-        } catch (NumberFormatException e) {
-            errors.append("社員IDは数値のみ許可されます。<br>");
-            return null;
-        }
-    }
-
-    private Integer parseInteger(String valueStr, StringBuilder errors, String fieldName) {
-        try {
-            return valueStr.isEmpty() ? null : Integer.valueOf(valueStr);
-        } catch (NumberFormatException e) {
-            errors.append(fieldName).append("は数値のみ許可されます。<br>");
-            return null;
-        }
-    }
-
-    private LocalDate parseDate(String dateStr, StringBuilder errors, String fieldName) {
-        try {
-            return dateStr.isEmpty() ? null : LocalDate.parse(dateStr, DATE_FORMATTER);
-        } catch (DateTimeParseException e) {
-            errors.append(fieldName).append("の形式はyyyy/MM/ddでなければなりません。<br>");
-            return null;
-        }
-    }
-
-    private void validateAgeRange(Integer ageStart, Integer ageEnd, StringBuilder errors) {
+    private String validateInputs(Integer ageStart, Integer ageEnd, String sdateStart, String sdateEnd, String edateStart, String edateEnd) {
+        // 年齢の範囲チェック
         if (ageStart != null && ageEnd != null && ageStart > ageEnd) {
-            errors.append("年齢の範囲が正しくありません。<br>");
+            return "年齢の範囲が無効です。";
         }
-    }
-
-    private void validateDateRange(LocalDate startDate, LocalDate endDate, StringBuilder errors, String fieldName) {
-        if (startDate != null && endDate != null && startDate.isAfter(endDate)) {
-            errors.append(fieldName).append("の範囲が正しくありません。<br>");
+        // 開始日と終了日の範囲チェック
+        try {
+            if (sdateStart != null && sdateEnd != null && LocalDate.parse(sdateStart).isAfter(LocalDate.parse(sdateEnd))) {
+                return "開始日が終了日を上回っています。";
+            }
+            if (edateStart != null && edateEnd != null && LocalDate.parse(edateStart).isAfter(LocalDate.parse(edateEnd))) {
+                return "終了日が終了日を上回っています。";
+            }
+        } catch (DateTimeParseException e) {
+            return "日付の形式が無効です。";
         }
+        return null;
     }
 }

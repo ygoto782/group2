@@ -15,47 +15,68 @@ public class SearchService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<Meibo> search(int id, Integer ageStart, Integer ageEnd, String name, LocalDate sdateStart, LocalDate sdateEnd, LocalDate edateStart, LocalDate edateEnd) {
-        String sql = "SELECT * FROM meibo WHERE 1=1";
-
-        // 動的にクエリを組み立てる
+    /**
+     * 社員情報を検索するメソッド
+     * `MeiboForm` のリストとして返します。
+     * 
+     * @param id 社員ID（0の場合は条件に含まれません）
+     * @param name 社員名（nullまたは空文字の場合は条件に含まれません）
+     * @param ageStart 年齢の開始範囲（nullの場合は条件に含まれません）
+     * @param ageEnd 年齢の終了範囲（nullの場合は条件に含まれません）
+     * @param sdateStart 開始日の開始範囲（nullの場合は条件に含まれません）
+     * @param sdateEnd 開始日の終了範囲（nullの場合は条件に含まれません）
+     * @param edateStart 終了日の開始範囲（nullの場合は条件に含まれません）
+     * @param edateEnd 終了日の終了範囲（nullの場合は条件に含まれません）
+     * @return 検索結果の社員情報リスト
+     */
+    public List<MeiboForm> search(int id, String name, Integer ageStart, Integer ageEnd, LocalDate sdateStart, LocalDate sdateEnd, LocalDate edateStart, LocalDate edateEnd) {
+        StringBuilder sql = new StringBuilder("SELECT * FROM meibo WHERE 1=1");
         List<Object> params = new ArrayList<>();
+
+        // 社員IDが指定されている場合
         if (id > 0) {
-            sql += " AND id = ?";
+            sql.append(" AND id = ?");
             params.add(id);
         }
+        // 社員名が指定されている場合
+        if (name != null && !name.isEmpty()) {
+            sql.append(" AND name LIKE ?");
+            params.add("%" + name + "%");
+        }
+
+        // 年齢の範囲が指定されている場合
         if (ageStart != null) {
-            sql += " AND age >= ?";
+            sql.append(" AND age >= ?");
             params.add(ageStart);
         }
         if (ageEnd != null) {
-            sql += " AND age <= ?";
+            sql.append(" AND age <= ?");
             params.add(ageEnd);
         }
-        if (name != null && !name.isEmpty()) {
-            sql += " AND name LIKE ?";
-            params.add("%" + name + "%");
-        }
+
+        // 開始日の範囲が指定されている場合
         if (sdateStart != null) {
-            sql += " AND sdate >= ?";
+            sql.append(" AND sdate >= ?");
             params.add(java.sql.Date.valueOf(sdateStart));
         }
         if (sdateEnd != null) {
-            sql += " AND sdate <= ?";
+            sql.append(" AND sdate <= ?");
             params.add(java.sql.Date.valueOf(sdateEnd));
         }
+
+        // 終了日の範囲が指定されている場合
         if (edateStart != null) {
-            sql += " AND edate >= ?";
+            sql.append(" AND edate >= ?");
             params.add(java.sql.Date.valueOf(edateStart));
         }
         if (edateEnd != null) {
-            sql += " AND edate <= ?";
+            sql.append(" AND edate <= ?");
             params.add(java.sql.Date.valueOf(edateEnd));
         }
 
-        // RowMapperのラムダ式実装
-        RowMapper<Meibo> rowMapper = (rs, rowNum) -> {
-            Meibo meibo = new Meibo();
+        // RowMapperを使用して結果セットをMeiboFormにマッピング
+        RowMapper<MeiboForm> rowMapper = (rs, rowNum) -> {
+            MeiboForm meibo = new MeiboForm();
             meibo.setId(rs.getInt("id"));
             meibo.setName(rs.getString("name"));
             meibo.setAge(rs.getInt("age"));
@@ -65,7 +86,40 @@ public class SearchService {
             return meibo;
         };
 
-        // queryメソッドを使用 (非推奨のメソッドを避ける)
-        return jdbcTemplate.query(sql, rowMapper, params.toArray());
+        // 構築したSQLクエリとパラメータでデータベースをクエリし、結果を返す
+        try {
+            return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray());
+        } catch (Exception e) {
+            // エラーハンドリングの追加
+            throw new RuntimeException("検索中にエラーが発生しました", e);
+        }
+    }
+
+    /**
+     * 指定されたIDの社員情報を取得するメソッド
+     * 
+     * @param id 社員ID
+     * @return 指定されたIDの社員情報
+     */
+    public MeiboForm findById(int id) {
+        String sql = "SELECT * FROM meibo WHERE id = ?";
+        
+        RowMapper<MeiboForm> rowMapper = (rs, rowNum) -> {
+            MeiboForm meibo = new MeiboForm();
+            meibo.setId(rs.getInt("id"));
+            meibo.setName(rs.getString("name"));
+            meibo.setAge(rs.getInt("age"));
+            meibo.setSdate(rs.getDate("sdate") != null ? rs.getDate("sdate").toLocalDate() : null);
+            meibo.setEdate(rs.getDate("edate") != null ? rs.getDate("edate").toLocalDate() : null);
+            meibo.setPassword(rs.getString("password"));
+            return meibo;
+        };
+
+        try {
+            return jdbcTemplate.queryForObject(sql, rowMapper, id);
+        } catch (Exception e) {
+            // エラーハンドリングの追加
+            throw new RuntimeException("指定されたIDの社員情報取得中にエラーが発生しました", e);
+        }
     }
 }
