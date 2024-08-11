@@ -6,34 +6,34 @@
     <link rel="stylesheet" href="../static/css/search/search1.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員情報検索</title>
-	<script>
-	    function getSelectedIds() {
-	        const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-	        const ids = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
-	        return ids.join(',');
-	    }
+    <script>
+        function getSelectedIds() {
+            const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const ids = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+            return ids.join(',');
+        }
 
-	    function handleDelete() {
-	        const selectedIds = getSelectedIds();
-	        if (selectedIds) {
-	            window.location.href = `/delete1.html?ids=${selectedIds}`;
-	        } else {
-	            alert('削除するレコードが選択されていません。');
-	        }
-	    }
+        function handleDelete() {
+            const selectedIds = getSelectedIds();
+            if (selectedIds) {
+                const deleteUrl = `/delete1?ids=${selectedIds}`;
+                window.location.href = deleteUrl;
+            } else {
+                alert('削除するレコードが選択されていません。');
+            }
+        }
 
-	    // 1行のみ選択可能にする関数
-	    function handleRowClick(event) {
-	        // 全ての行からselectedクラスを削除
-	        const rows = document.querySelectorAll('tr');
-	        rows.forEach(row => row.classList.remove('selected'));
+        // 1行のみ選択可能にする関数
+        function handleRowClick(event) {
+            // 全ての行からselectedクラスを削除
+            const rows = document.querySelectorAll('tr');
+            rows.forEach(row => row.classList.remove('selected'));
 
-	        // クリックされた行にselectedクラスを追加
-	        const clickedRow = event.currentTarget;
-	        clickedRow.classList.add('selected');
-	    }
-	</script>
-
+            // クリックされた行にselectedクラスを追加
+            const clickedRow = event.currentTarget;
+            clickedRow.classList.add('selected');
+        }
+    </script>
 </head>
 <body>
     <div class="header">
@@ -45,15 +45,15 @@
     </div>
     <div class="topBox">
         <div class="topBox1">
-            <a href="./main1.html">メニュー</a>
+            <a href="/main1">メニュー</a>
         </div>
         <div class="topBox2">
-            <a href="./signup1.html">登録</a>
+            <a href="/signup1">登録</a>
         </div>
     </div>
 
     <div class="main">
-        <form id="searchForm" action="/search1" method="get">
+        <form id="searchForm" action="/search" method="get">
             <div class="onetwo">
                 <div class="t-left">
                     <div class="end">
@@ -100,18 +100,13 @@
             </div>
         </form>
 
-        <!-- エラーメッセージ表示 -->
-        <div class="error" th:if="${errorMessage != null}">
-            <p th:text="${errorMessage}"></p>
-        </div>
-
         <!-- 件数表示 -->
-        <div class="count" th:if="${meiboList != null}">
+        <div class="count">
             <span th:text="${count}">0</span>件
         </div>
 
         <!-- 検索結果表示 -->
-        <div class="threefour" th:if="${meiboList != null}">
+        <div class="threefour">
             <div class="d-left">
                 <table border="1">
                     <tr class="th1">
@@ -134,12 +129,11 @@
                 </table>
             </div>
             <div class="d-right">
-                <button onclick="handleDelete()">削除</button>
+                <a href="/delete1" onclick="handleDelete(); return false;" class="delete-button">削除</a>
             </div>
         </div>
     </div>
     <script src="/js/timer.js"></script>
-    <script src="../static/js/timer.js"></script>
 </body>
 <footer>
     <div class="other"><h6>group2🄫2024</h6></div>
