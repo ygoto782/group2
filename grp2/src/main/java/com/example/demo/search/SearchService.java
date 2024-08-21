@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.search;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+
+import com.example.demo.MeiboForm;
 
 @Service
 public class SearchService {
