@@ -1,3 +1,4 @@
+
 package com.example.demo;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ public class MeiboForm {
     private LocalDate sdate; // 開始日
     private LocalDate edate; // 終了日
     private String password; // パスワード
+    private String confirmPassword; // パスワード確認（追加）
     private Integer ageStart;
     private Integer ageEnd;
     private LocalDate sdateStart;
@@ -18,6 +20,7 @@ public class MeiboForm {
     private LocalDate edateStart;
     private LocalDate edateEnd;
 
+    // ゲッターとセッター
     public int getId() {
         return id;
     }
@@ -64,6 +67,14 @@ public class MeiboForm {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Integer getAgeStart() {
@@ -114,32 +125,31 @@ public class MeiboForm {
         this.edateEnd = edateEnd;
     }
 
-    // バリデーションメソッド: フォームのフィールドが有効かどうかをチェックする
+    // バリデーションメソッド
     public boolean isValid() {
-        return isNameValid() && isPasswordValid() && isAgeValid() && isDateValid();
+        return isNameValid() && isPasswordValid() && isPasswordMatch() && isAgeValid() && isDateValid();
     }
 
-    // 名前のバリデーション: 名前が null でなく、空でなく、長さが 100 文字以下であるかをチェック
     private boolean isNameValid() {
         return name != null && !name.isEmpty() && name.length() <= 100;
     }
 
-    // パスワードのバリデーション: パスワードが null でなく、長さが 8 文字以上 20 文字以下であるかをチェック
     private boolean isPasswordValid() {
         return password != null && password.length() >= 8 && password.length() <= 20;
     }
 
-    // 年齢のバリデーション: 年齢が 0 以上であるかをチェック
+    private boolean isPasswordMatch() {
+        return password != null && password.equals(confirmPassword);
+    }
+
     private boolean isAgeValid() {
         return age >= 0;
     }
 
-    // 日付のバリデーション: 開始日が終了日より前であり、両方が null でないことをチェック
     private boolean isDateValid() {
         return sdate != null && edate != null && !sdate.isAfter(edate);
     }
 
-    // オブジェクトの等価性を判断するメソッド: 他のオブジェクトと比較し、すべてのフィールドが一致するかを確認
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -153,13 +163,11 @@ public class MeiboForm {
                 Objects.equals(password, meibo.password);
     }
 
-    // オブジェクトのハッシュコードを生成するメソッド: オブジェクトのハッシュコードを計算し、一意に識別できるようにする
     @Override
     public int hashCode() {
         return Objects.hash(id, name, age, sdate, edate, password);
     }
 
-    // オブジェクトを文字列に変換するメソッド: オブジェクトの内容を文字列として表現する
     @Override
     public String toString() {
         return "MeiboForm{" +
