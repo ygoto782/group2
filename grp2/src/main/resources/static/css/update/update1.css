@@ -2,12 +2,14 @@
     text-align: right;
     margin-bottom: 10px;
 }
+
 .header {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid black;
     margin-bottom: 20px;
 }
+
 footer {
     position: fixed;
     right: 0;
@@ -16,40 +18,43 @@ footer {
     font-size: 13px;
 }
 
-body{
+body {
     height: 700px;
 }
-.all{
-    height: 60%;
-    border-bottom: 1px solid black;
+
+.all {
+
     margin-bottom: 10px;
 }
-.linkBox{
+
+.linkBox {
     height: 60%;
+    border-bottom: 1px solid black;
 }
-.linkBox1{
+
+.linkBox1 {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end; /* 縦位置を揃える */
     margin: 2% 20%;
 }
 
-
-.linkBox1{
+input {
     display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-}
-input{
-    display: flex;
+    width: 30%; /* 入力欄を全て同じ幅にする */
+    box-sizing: border-box; /* パディングやボーダーを含めて幅を調整 */
 }
 
-
-.selectButton{
-    margin: 0% 35%;
-    text-align: center;
+/* ボタンのスタイル */
+/* 全体を中央に配置 */
+.selectButton {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* 水平方向の中央揃え */
+    margin: 20px 0; /* 上下のマージン */
 }
-button{
+
+/* ボタンの間隔を設定 */
+button {
     padding: 10px 20px;
+    margin: 0 10px; /* ボタン間のスペース */
 }
