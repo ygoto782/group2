@@ -10,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.MeiboForm;
-
 @Controller
 public class SearchController {
 
@@ -38,7 +36,7 @@ public class SearchController {
             model.addAttribute("count", 0);
             model.addAttribute("errorMessage", errorMessage);
         } else {
-            List<MeiboForm> results;
+            List<com.example.demo.meibo.MeiboForm> results;
             try {
                 LocalDate sdateStartLocal = sdateStart != null ? LocalDate.parse(sdateStart) : null;
                 LocalDate sdateEndLocal = sdateEnd != null ? LocalDate.parse(sdateEnd) : null;

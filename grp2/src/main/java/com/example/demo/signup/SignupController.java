@@ -1,4 +1,3 @@
-
 package com.example.demo.signup;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.example.demo.MeiboForm;
 import com.example.demo.meibo.Meibo;
+import com.example.demo.meibo.MeiboForm;
 import com.example.demo.meibo.MeiboService;
+
 @Controller
 public class SignupController {
 
@@ -50,5 +50,4 @@ public class SignupController {
 
         return "signup3"; // 完了ページへの遷移
     }
-
 }
