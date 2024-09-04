@@ -1,5 +1,5 @@
 
-package com.example.demo;
+package com.example.demo.meibo;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -12,7 +12,7 @@ public class MeiboForm {
     private LocalDate sdate; // 開始日
     private LocalDate edate; // 終了日
     private String password; // パスワード
-    private String confirmPassword; // パスワード確認（追加）
+    private String confirmPassword; // パスワード確認
     private Integer ageStart;
     private Integer ageEnd;
     private LocalDate sdateStart;

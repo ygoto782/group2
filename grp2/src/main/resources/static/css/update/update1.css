@@ -23,13 +23,11 @@ body {
 }
 
 .all {
-
     margin-bottom: 10px;
 }
 
 .linkBox {
     height: 60%;
-    border-bottom: 1px solid black;
 }
 
 .linkBox1 {
@@ -45,16 +43,17 @@ input {
     box-sizing: border-box; /* パディングやボーダーを含めて幅を調整 */
 }
 
+
 /* ボタンのスタイル */
 /* 全体を中央に配置 */
 .selectButton {
+	border-top: 1px solid black;
     display: flex;
     justify-content: center; /* 水平方向の中央揃え */
-    margin: 20px 0; /* 上下のマージン */
+    gap: 20px; /* ボタン間のスペース */
+    padding: 20px 0; /* 上下のマージン */
 }
 
-/* ボタンの間隔を設定 */
 button {
     padding: 10px 20px;
-    margin: 0 10px; /* ボタン間のスペース */
 }

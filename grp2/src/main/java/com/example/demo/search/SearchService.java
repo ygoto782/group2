@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.MeiboForm;
+import com.example.demo.meibo.MeiboForm;
 
 @Service
 public class SearchService {
@@ -31,7 +31,7 @@ public class SearchService {
      * @param edateEnd 終了日の終了範囲（nullの場合は条件に含まれません）
      * @return 検索結果の社員情報リスト
      */
-    public List<MeiboForm> search(int id, String name, Integer ageStart, Integer ageEnd, LocalDate sdateStart, LocalDate sdateEnd, LocalDate edateStart, LocalDate edateEnd) {
+    public List<com.example.demo.meibo.MeiboForm> search(int id, String name, Integer ageStart, Integer ageEnd, LocalDate sdateStart, LocalDate sdateEnd, LocalDate edateStart, LocalDate edateEnd) {
         StringBuilder sql = new StringBuilder("SELECT * FROM meibo WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
@@ -122,6 +122,29 @@ public class SearchService {
         } catch (Exception e) {
             // エラーハンドリングの追加
             throw new RuntimeException("指定されたIDの社員情報取得中にエラーが発生しました", e);
+        }
+    }
+
+    /**
+     * 指定された社員情報を更新するメソッド
+     * 
+     * @param meiboForm 更新する社員情報を含むフォーム
+     */
+    public void updateEmployee(MeiboForm meiboForm) {
+        String sql = "UPDATE meibo SET name = ?, age = ?, sdate = ?, edate = ?, password = ? WHERE id = ?";
+        
+        try {
+            jdbcTemplate.update(sql,
+                meiboForm.getName(),
+                meiboForm.getAge(),
+                meiboForm.getSdate() != null ? java.sql.Date.valueOf(meiboForm.getSdate()) : null,
+                meiboForm.getEdate() != null ? java.sql.Date.valueOf(meiboForm.getEdate()) : null,
+                meiboForm.getPassword(),
+                meiboForm.getId()
+            );
+        } catch (Exception e) {
+            // エラーハンドリングの追加
+            throw new RuntimeException("社員情報の更新中にエラーが発生しました", e);
         }
     }
 }
