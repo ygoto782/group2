@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.meibo.Meibo;
 import com.example.demo.meibo.MeiboForm;
-import com.example.demo.meibo.MeiboService;
 
 @Controller
 public class SignupController {
