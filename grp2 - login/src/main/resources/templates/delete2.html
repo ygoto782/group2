@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/delete/delete2.css">
+    <link rel="stylesheet" href="../static/css/delete/delete2.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>削除（確認）</title>
+</head>
+	<body>
+	    
+	    <div class="all">
+	        
+	        <div class="header">
+	            <div class="topMenu"><h3>社員情報更新</h3></div>
+	            <div class="userBox">
+	                <span th:text="${userName}">〇〇さん</span>
+	                <div id="dateTimer" class="date"></div>
+	            </div>
+	        </div>
+	        <div class="linkBox">
+	            <p th:text="${msg}"></p>
+	        </div>
+	    </div>
+	    <div class="selectButton">
+	        <div><a href="/search1"><button class="back">検索へ</button></a></div>
+	        <div><a href="/main1"><button>メニュー</button></a></div>
+	    </div>
+	    <script src="../static/js/timer.js"></script>
+	</body>
+    
+</html>

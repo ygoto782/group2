@@ -1,10 +1,8 @@
 
-package com.example.demo.signup;
+package com.example.demo.meibo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.example.demo.meibo.Meibo;
 
 @Service
 public class MeiboService {

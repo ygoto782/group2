@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="css/delete/delete1.css">
     <link rel="stylesheet" href="../static/css/delete/delete1.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>削除</title>
 </head>
 <body>
     <form action="/delete" method="post">
@@ -14,7 +14,7 @@
             <div class="header">
                 <div class="topMenu"><h3>社員情報削除</h3></div>
                 <div class="userBox">
-                    <div class="userName">〇〇さん</div>
+	                <span th:text="${userName}">〇〇さん</span>
                     <div id="dateTimer" class="date"></div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
         </div>
         <div class="selectButton">
             <input type="submit" value="削除する">
-            <button type="button" onclick="goBack()">戻る</button>
+            <div><a href="#"onclick="goBack()"><button>戻る</button></a></div>
         </div>
         <script src="../static/js/timer.js"></script>
         <script>

@@ -57,17 +57,3 @@ input {
 button {
     padding: 10px 20px;
 }
-.idContainer {
-    display: flex;
-    align-items: center; /* 縦方向の中央揃え */
-	width: 30%;
-}
-
-.che {
-    margin-right: 5px; /* ボタンと入力欄の間のスペース */
-    padding: 0px; /* ボタンのパディング調整 */
-	width: 20%;
-}
-.chack {
-	width: 80%;
-}

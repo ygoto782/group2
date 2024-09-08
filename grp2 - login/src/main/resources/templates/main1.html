@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+	    <meta charset="UTF-8">
+	    <link rel="stylesheet" href="/css/main/main1.css">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<a class="out" href="/login">ログアウト</a>
+	    <title>トップメニュー</title>
+	</head>
+	<body>
+	    <div class="header">
+	        <div class="topMenu"><h3>トップメニュー</h3></div>
+	        <div class="userBox">
+	            <div class="userName">
+	                <!-- ユーザー名を表示 -->
+	                <span th:text="${userName}">〇〇さん</span>
+	            </div>
+	            <div id="dateTimer" class="date"></div>
+	        </div>
+	    </div>
+	    <div class="linkBox">
+	        <div class="linkBox1">
+	            <a href="/search1">社員情報検索</a>
+	        </div>
+	        <div class="linkBox2">
+	            <a href="/delete1">社員情報削除</a>
+	        </div>
+	        <div class="linkBox3">
+	            <a href="/signup1">社員情報登録</a>
+	        </div>
+	        <div class="linkBox4">
+	            <a href="/update1">社員情報更新</a>
+	        </div>
+	    </div>
+	
+	    <script src="/js/timer.js"></script>
+	</body>
+	<footer>
+	    <div class="other"><h6>group2🄫2024</h6></div>
+	</footer>
+</html>
