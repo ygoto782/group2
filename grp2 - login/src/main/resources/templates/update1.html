@@ -59,19 +59,16 @@
         <div class="header">
             <div class="topMenu"><h3>社員情報更新</h3></div>
             <div class="userBox">
-                <div class="userName">〇〇さん</div>
+                <span th:text="${userName}">〇〇さん</span>
                 <div id="dateTimer" class="date"></div>
             </div>
         </div>
         <div class="linkBox">
             <form name="updateForm" action="/updateEmployee" method="post" onsubmit="return validateForm();">
-				<div class="linkBox1">
-				    <div>社員ID</div>
-				    <div class="idContainer">
-				        <button class="che">！</button>
-				        <input class="chack" t type="text" name="id" id="id" pattern="\d*" title="数値のみ">
-				    </div>
-				</div>
+                <div class="linkBox1">
+                    <div>社員ID</div>
+                    <input type="text" name="id" value="${meibo.id}" readonly>
+                </div>
                 <div class="linkBox1">
                     <div>社員名</div>
                     <input type="text" name="name" value="${meibo.name}">
@@ -82,11 +79,11 @@
                 </div>
                 <div class="linkBox1">
                     <div>パスワード</div>
-                    <input type="password" name="password">
+                    <input type="password" name="password" required>
                 </div>
                 <div class="linkBox1">
                     <div>パスワード確認</div>
-                    <input type="password" name="confirmPassword">
+                    <input type="password" name="confirmPassword" required>
                 </div>
                 <div class="linkBox1">
                     <div>開始日</div>

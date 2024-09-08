@@ -1,9 +1,7 @@
-
-package com.example.demo.signup;
+package com.example.demo.meibo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.meibo.Meibo;
-
 public interface MeiboRepository extends JpaRepository<Meibo, Long> {
+    Meibo findByName(String name);
 }

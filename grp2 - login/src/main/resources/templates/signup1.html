@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/signup/signup1.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社員情報登録</title>
+</head>
+<body>
+    <div class="all">
+        <div class="header">
+            <div class="topMenu"><h3>社員情報登録(入力)</h3></div>
+            <div class="userBox">
+                <span th:text="${userName}">〇〇さん</span>
+                <div id="dateTimer" class="date"></div>
+            </div>
+        </div>
+        <form action="/signup2" method="post">
+            <div class="linkBox">
+                <div class="linkBox1">
+                    <div>社員名<span>＊</span></div>
+                    <input type="text" name="name" title="社員名" required>
+                </div>
+                <div class="linkBox1">
+                    <div>年齢<span>＊</span></div>
+                    <input type="number" name="age" title="年齢" required min="18" max="65">
+                </div>
+                <div class="linkBox1">
+                    <div>パスワード<span>＊</span></div>
+                    <input type="password" name="password" title="パスワード" required minlength="8" pattern="(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]{8,}">
+                </div>
+                <div class="linkBox1">
+                    <div>パスワード確認<span>＊</span></div>
+                    <input type="password" name="confirmPassword" title="パスワード確認" required>
+                </div>
+            </div>
+            <div class="selectButton">
+                <button type="submit">登録</button>
+                <a href="/main1"><button type="button">戻る</button></a>
+            </div>
+            <div class="errorMessage">
+                <p th:if="${errorMessage}" th:text="${errorMessage}"></p>
+            </div>
+        </form>
+    </div>
+	<script src="/js/timer.js"></script>
+</body>
+</html>

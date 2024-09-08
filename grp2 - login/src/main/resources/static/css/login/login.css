@@ -75,6 +75,7 @@ a {
     margin-top: 10px;
 }
 
+
 a:hover {
     text-decoration: underline;
 }
@@ -87,4 +88,8 @@ footer {
 footer h6 {
     font-size: 12px;
     color: #aaa;
+}
+.error-message {
+    color: red;
+    font-weight: bold;
 }
