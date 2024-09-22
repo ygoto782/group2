@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/search/search1.css">
-    <link rel="stylesheet" href="../static/css/search/search1.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員情報検索</title>
     <script>
         function getSelectedIds() {
             const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            const ids = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
-            return ids.join(',');
+            return Array.from(selectedCheckboxes).map(checkbox => checkbox.value).join(',');
         }
 
         function handleDelete() {
@@ -25,13 +23,13 @@
 
         // 1行のみ選択可能にする関数
         function handleRowClick(event) {
-            // 全ての行からselectedクラスを削除
             const rows = document.querySelectorAll('tr');
             rows.forEach(row => row.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+        }
 
-            // クリックされた行にselectedクラスを追加
-            const clickedRow = event.currentTarget;
-            clickedRow.classList.add('selected');
+        function clearForm() {
+            document.getElementById('searchForm').reset();
         }
     </script>
 </head>
@@ -120,7 +118,7 @@
                     <!-- 検索結果を表示するための行を追加 -->
                     <tr th:each="meibo : ${meiboList}" onclick="handleRowClick(event)">
                         <td><input type="checkbox" value="${meibo.id}" class="record-checkbox"></td>
-                        <td><a class="id-link" th:href="@{/update/{id}(id=${meibo.id})}" th:text="${meibo.id}"></a></td>
+                        <td><a class="id-link" th:href="@{/update1(id=${meibo.id})}" th:text="${meibo.id}"></a></td>
                         <td th:text="${meibo.name}"></td>
                         <td th:text="${meibo.age}"></td>
                         <td th:text="${meibo.sdate}"></td>

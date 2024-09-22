@@ -29,6 +29,7 @@ public class LoginController {
     public ModelAndView login(@RequestParam Long id, @RequestParam String password, HttpSession session) {
         Meibo user = meiboService.findById(id); // IDで検索
         if (user != null && user.getPassword().equals(password)) {
+            session.setAttribute("userId", user.getId()); // セッションにユーザーIDを保存
             session.setAttribute("userName", user.getName()); // セッションにユーザー名を保存
             return new ModelAndView("redirect:/main1");
         } else {

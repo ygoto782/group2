@@ -5,35 +5,29 @@ import java.util.Objects;
 
 public class MeiboForm {
 
-    private int id; // 社員ID
+    private Long id; // 社員IDをLong型に変更
     private String name; // 社員の名前
     private int age; // 年齢
     private LocalDate sdate; // 開始日
     private LocalDate edate; // 終了日
     private String password; // パスワード
     private String confirmPassword; // パスワード確認
-    private Integer ageStart;
-    private Integer ageEnd;
-    private LocalDate sdateStart;
-    private LocalDate sdateEnd;
-    private LocalDate edateStart;
-    private LocalDate edateEnd;
-    
+
     public MeiboForm() {}
 
     // コンストラクタ
-    public MeiboForm(int id, String name, String password) {
+    public MeiboForm(Long id, String name, String password) { // 引数の型を変更
         this.id = id;
         this.name = name;
         this.password = password;
     }
 
     // ゲッターとセッター
-    public int getId() {
+    public Long getId() { // 戻り値の型を変更
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) { // 引数の型を変更
         this.id = id;
     }
 
@@ -85,54 +79,6 @@ public class MeiboForm {
         this.confirmPassword = confirmPassword;
     }
 
-    public Integer getAgeStart() {
-        return ageStart;
-    }
-
-    public void setAgeStart(Integer ageStart) {
-        this.ageStart = ageStart;
-    }
-
-    public Integer getAgeEnd() {
-        return ageEnd;
-    }
-
-    public void setAgeEnd(Integer ageEnd) {
-        this.ageEnd = ageEnd;
-    }
-
-    public LocalDate getSdateStart() {
-        return sdateStart;
-    }
-
-    public void setSdateStart(LocalDate sdateStart) {
-        this.sdateStart = sdateStart;
-    }
-
-    public LocalDate getSdateEnd() {
-        return sdateEnd;
-    }
-
-    public void setSdateEnd(LocalDate sdateEnd) {
-        this.sdateEnd = sdateEnd;
-    }
-
-    public LocalDate getEdateStart() {
-        return edateStart;
-    }
-
-    public void setEdateStart(LocalDate edateStart) {
-        this.edateStart = edateStart;
-    }
-
-    public LocalDate getEdateEnd() {
-        return edateEnd;
-    }
-
-    public void setEdateEnd(LocalDate edateEnd) {
-        this.edateEnd = edateEnd;
-    }
-
     // バリデーションメソッド
     public boolean isValid() {
         return isNameValid() && isPasswordValid() && isPasswordMatch() && isAgeValid() && isDateValid();
@@ -163,17 +109,16 @@ public class MeiboForm {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MeiboForm meibo = (MeiboForm) o;
-        return id == meibo.id &&
-                age == meibo.age &&
+        return age == meibo.age &&
+                Objects.equals(id, meibo.id) && // idをLong型に変更
                 Objects.equals(name, meibo.name) &&
                 Objects.equals(sdate, meibo.sdate) &&
-                Objects.equals(edate, meibo.edate) &&
-                Objects.equals(password, meibo.password);
+                Objects.equals(edate, meibo.edate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, age, sdate, edate, password);
+        return Objects.hash(id, name, age, sdate, edate); // idをLong型に変更
     }
 
     @Override

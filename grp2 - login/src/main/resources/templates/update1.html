@@ -5,46 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員情報更新</title>
     <link rel="stylesheet" href="/css/update/update1.css">
-    <link rel="stylesheet" href="../static/css/update/update1.css">
     <script>
-        // JavaScriptでの入力チェックとエラーメッセージ表示
         function validateForm() {
             const form = document.forms['updateForm'];
             const password = form['password'].value;
             const confirmPassword = form['confirmPassword'].value;
             const errors = [];
             
-            // 社員名チェック
             if (form['name'].value.trim() === '') {
                 errors.push('社員名は必須です。');
             }
             
-            // 年齢チェック
             if (!/^\d+$/.test(form['age'].value)) {
                 errors.push('年齢は数値のみを許可します。');
             }
 
-            // パスワードチェック
             const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
             if (!passwordPattern.test(password)) {
                 errors.push('パスワードは8文字以上で、大文字を含む半角英数字でなければなりません。');
             }
 
-            // パスワード確認チェック
             if (password !== confirmPassword) {
                 errors.push('パスワードと確認用パスワードが一致しません。');
             }
 
-            // 開始日と終了日チェック
-            const datePattern = /^\d{4}\/\d{2}\/\d{2}$/;
+            const datePattern = /^\d{4}-\d{2}-\d{2}$/;
             if (!datePattern.test(form['sdate'].value)) {
-                errors.push('開始日はyyyy/MM/dd形式で入力してください。');
+                errors.push('開始日はyyyy-MM-dd形式で入力してください。');
             }
             if (form['edate'].value && !datePattern.test(form['edate'].value)) {
-                errors.push('終了日はyyyy/MM/dd形式で入力してください。');
+                errors.push('終了日はyyyy-MM-dd形式で入力してください。');
             }
 
-            // エラーがあれば表示
             if (errors.length > 0) {
                 alert(errors.join("\n"));
                 return false;
@@ -64,18 +56,18 @@
             </div>
         </div>
         <div class="linkBox">
-            <form name="updateForm" action="/updateEmployee" method="post" onsubmit="return validateForm();">
+            <form name="updateForm" action="/update1" method="post" onsubmit="return validateForm();">
                 <div class="linkBox1">
                     <div>社員ID</div>
-                    <input type="text" name="id" value="${meibo.id}" readonly>
+                    <input type="text" name="id" th:value="${meibo.id}" readonly>
                 </div>
                 <div class="linkBox1">
                     <div>社員名</div>
-                    <input type="text" name="name" value="${meibo.name}">
+                    <input type="text" name="name" th:value="${meibo.name}" required>
                 </div>
                 <div class="linkBox1">
                     <div>年齢</div>
-                    <input type="number" name="age" value="${meibo.age}">
+                    <input type="number" name="age" th:value="${meibo.age}" required>
                 </div>
                 <div class="linkBox1">
                     <div>パスワード</div>
@@ -87,21 +79,20 @@
                 </div>
                 <div class="linkBox1">
                     <div>開始日</div>
-                    <input type="date" name="sdate" value="${meibo.sdate}">
+                    <input type="date" name="sdate" th:value="${meibo.sdate}" required>
                 </div>
                 <div class="linkBox1">
                     <div>終了日</div>
-                    <input type="date" name="edate" value="${meibo.edate}">
+                    <input type="date" name="edate" th:value="${meibo.edate}">
                 </div>
                 <div class="selectButton">
                     <button type="submit">確認</button>
-                    <a href="/delete1"><button type="button">削除</button></a>
                     <a href="/main1"><button type="button">戻る</button></a>
                 </div>
             </form>
         </div>
     </div>
-	<script src="/js/timer.js"></script>
+    <script src="/js/timer.js"></script>
 </body>
 <footer>
     <div class="other"><h6>group2🄫2024</h6></div>

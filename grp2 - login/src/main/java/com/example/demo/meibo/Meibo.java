@@ -1,5 +1,7 @@
 package com.example.demo.meibo;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +16,8 @@ public class Meibo {
     private String name;  // usernameに相当
     private int age;
     private String password;
+    private LocalDate sdate; // 開始日
+    private LocalDate edate; // 終了日
 
     // Getters and setters
     public Long getId() {
@@ -46,5 +50,21 @@ public class Meibo {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public LocalDate getSdate() {
+        return sdate;
+    }
+
+    public void setSdate(LocalDate sdate) {
+        this.sdate = sdate;
+    }
+
+    public LocalDate getEdate() {
+        return edate;
+    }
+
+    public void setEdate(LocalDate edate) {
+        this.edate = edate;
     }
 }
