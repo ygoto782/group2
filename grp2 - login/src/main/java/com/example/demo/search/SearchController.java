@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +20,7 @@ public class SearchController {
 
     @GetMapping("/search")
     public String getSearch(
-            @RequestParam(name = "id", defaultValue = "0") int id,
+            @RequestParam(name = "id", defaultValue = "0") Long id,
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "ageStart", required = false) Integer ageStart,
             @RequestParam(name = "ageEnd", required = false) Integer ageEnd,
@@ -26,7 +28,12 @@ public class SearchController {
             @RequestParam(name = "sdateEnd", required = false) String sdateEnd,
             @RequestParam(name = "edateStart", required = false) String edateStart,
             @RequestParam(name = "edateEnd", required = false) String edateEnd,
+            HttpSession session, // HttpSessionを追加
             Model model) {
+
+        // ユーザー名をセッションから取得し、モデルに追加
+        String userName = (String) session.getAttribute("userName");
+        model.addAttribute("userName", userName);
 
         // 入力チェックと変換
         String errorMessage = validateInputs(ageStart, ageEnd, sdateStart, sdateEnd, edateStart, edateEnd);

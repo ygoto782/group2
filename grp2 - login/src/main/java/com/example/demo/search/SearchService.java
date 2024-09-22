@@ -31,12 +31,12 @@ public class SearchService {
      * @param edateEnd 終了日の終了範囲（nullの場合は条件に含まれません）
      * @return 検索結果の社員情報リスト
      */
-    public List<com.example.demo.meibo.MeiboForm> search(int id, String name, Integer ageStart, Integer ageEnd, LocalDate sdateStart, LocalDate sdateEnd, LocalDate edateStart, LocalDate edateEnd) {
+    public List<com.example.demo.meibo.MeiboForm> search(Long id, String name, Integer ageStart, Integer ageEnd, LocalDate sdateStart, LocalDate sdateEnd, LocalDate edateStart, LocalDate edateEnd) {
         StringBuilder sql = new StringBuilder("SELECT * FROM meibo WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
         // 社員IDが指定されている場合
-        if (id > 0) {
+        if (id != null && id > 0) { // idの型をLongに変更
             sql.append(" AND id = ?");
             params.add(id);
         }
@@ -79,7 +79,7 @@ public class SearchService {
         // RowMapperを使用して結果セットをMeiboFormにマッピング
         RowMapper<MeiboForm> rowMapper = (rs, rowNum) -> {
             MeiboForm meibo = new MeiboForm();
-            meibo.setId(rs.getInt("id"));
+            meibo.setId(rs.getLong("id")); // idをLong型に変更
             meibo.setName(rs.getString("name"));
             meibo.setAge(rs.getInt("age"));
             meibo.setSdate(rs.getDate("sdate") != null ? rs.getDate("sdate").toLocalDate() : null);
@@ -103,12 +103,12 @@ public class SearchService {
      * @param id 社員ID
      * @return 指定されたIDの社員情報
      */
-    public MeiboForm findById(int id) {
+    public MeiboForm findById(Long id) { // idの型をLongに変更
         String sql = "SELECT * FROM meibo WHERE id = ?";
         
         RowMapper<MeiboForm> rowMapper = (rs, rowNum) -> {
             MeiboForm meibo = new MeiboForm();
-            meibo.setId(rs.getInt("id"));
+            meibo.setId(rs.getLong("id")); // idをLong型に変更
             meibo.setName(rs.getString("name"));
             meibo.setAge(rs.getInt("age"));
             meibo.setSdate(rs.getDate("sdate") != null ? rs.getDate("sdate").toLocalDate() : null);
@@ -140,7 +140,7 @@ public class SearchService {
                 meiboForm.getSdate() != null ? java.sql.Date.valueOf(meiboForm.getSdate()) : null,
                 meiboForm.getEdate() != null ? java.sql.Date.valueOf(meiboForm.getEdate()) : null,
                 meiboForm.getPassword(),
-                meiboForm.getId()
+                meiboForm.getId() // ここはLong型で渡す
             );
         } catch (Exception e) {
             // エラーハンドリングの追加
