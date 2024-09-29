@@ -1,0 +1,52 @@
+package com.example.demo.DeleteZone;
+
+import jakarta.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class DeleteController {
+    @Autowired
+    private DeleteService service; // 削除処理を行うサービスを自動注入
+
+    @Autowired
+    private HttpSession session; // セッションを自動注入
+
+    @GetMapping("/deleteConfirmation")
+    public String deleteConfirmation(
+        @RequestParam(value = "selectedIds", required = false) String selectedIds, Model model) {
+
+        // デバッグ用のログ出力
+        System.out.println("Received selectedIds: " + selectedIds);
+
+        if (selectedIds != null) {
+            session.setAttribute("selectedIds", selectedIds);
+        }
+        
+        // セッションからユーザー名を取得し、モデルに追加
+        String userName = (String) session.getAttribute("userName");
+        model.addAttribute("userName", userName); // ユーザー名をモデルに追加
+        
+        model.addAttribute("selectedIds", selectedIds); // モデルにselectedIdsを追加
+        return "delete1"; // 削除画面のテンプレートを返す
+    }
+
+
+
+
+    @PostMapping("/delete") // POSTリクエストに対するマッピング
+    public String delete(@RequestParam("selectedIds") String selectedIds, Model m) {
+        String[] idArray = selectedIds.split(","); // 受け取ったIDをカンマで分割
+        for (String idStr : idArray) {
+            int numId = Integer.parseInt(idStr.trim()); // 各IDを整数に変換
+            service.delete(numId); // DeleteServiceを使用して削除を実行
+        }
+        m.addAttribute("msg", "削除が正常に完了しました"); // 削除成功メッセージをモデルに追加
+        return "delete2"; // 削除完了画面のテンプレートを返す
+    }
+}

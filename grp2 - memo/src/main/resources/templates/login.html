@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/login/login.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body class="text-center">
+    <h1>Login</h1>
+    <form method="post" action="/login">
+        <label>ID</label>
+        <input type="text" name="id" required /><br/>
+        <br />
+        <label>パスワード</label>
+        <input type="password" name="password" required /><br/>
+        <br />
+        <button class="btn btn-primary" type="submit">ログイン</button>
+    </form>
+    <br />
+    <a href="/signup1">新規登録はこちら</a>
+    <br />
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+    <script src="/js/timer.js"></script>
+</body>
+<footer>
+    <div class="other"><h6>group2🄫2024</h6></div>
+</footer>
+</html>
