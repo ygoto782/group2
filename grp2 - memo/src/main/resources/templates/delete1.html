@@ -13,13 +13,13 @@
                 <div class="topMenu"><h3>社員情報削除</h3></div>
                 <div class="userBox">
                     <span th:text="${userName}">〇〇さん</span>
-                    <div id="dateTimer" class="date"></div>
+            		<div id="dateTimer" class="date"></div>
                 </div>
             </div>
             <div class="linkBox">
                 <div class="linkBox1">
                     <div>社員ID</div>
-                    <input type="text" name="selectedIds" th:value="${selectedIds}"  > <!-- セッションから取得したIDを表示 -->
+                    <input type="text" name="selectedIds" th:value="${selectedIds}"> <!-- セッションから取得したIDを表示 -->
                 </div>
             </div>
             <div class="message">こちらを削除します。よろしいですか？</div>
@@ -28,7 +28,7 @@
             <input type="submit" value="削除する">
             <div><button type="button" onclick="goBack()">戻る</button></div>
         </div>
-        <script src="../static/js/timer.js"></script>
+   		<script src="/js/timer.js"></script>
         <script>
             function goBack() {
                 window.history.back();

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/update/update2.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>確認画面</title>
+</head>
+<body>
+    <div class="all">
+        <div class="header">
+            <div class="topMenu"><h3>社員情報更新</h3></div>
+            <div class="userBox">
+                <span th:text="${userName}">〇〇さん</span>
+                <div id="dateTimer" class="date"></div>
+            </div>
+        </div>
+        <div class="linkBox">
+            <div class="linkBox1">
+                <div>社員ID</div>
+                <input type="text" th:value="${meibo.id}" readonly>
+            </div>
+            <div class="linkBox1">
+                <div>社員名</div>
+                <input type="text" th:value="${meibo.name}" readonly>
+            </div>
+            <div class="linkBox1">
+                <div>年齢</div>
+                <input type="text" th:value="${meibo.age}" readonly>
+            </div>
+            <div class="linkBox1">
+                <div>パスワード</div>
+                <input type="password" th:value="${meibo.password}" readonly>
+            </div>
+            <div class="linkBox1">
+                <div>開始日</div>
+                <input type="text" th:value="${meibo.sdate}" readonly>
+            </div>
+            <div class="linkBox1">
+                <div>終了日</div>
+                <input type="text" th:value="${meibo.edate}" readonly>
+            </div>
+        </div>
+        <div class="message">こちらを更新します。よろしいですか？</div>
+    </div>
+    <div class="selectButton">
+        <form action="/updateConfirm" method="post">
+            <input type="hidden" name="id" th:value="${meibo.id}">
+            <input type="hidden" name="name" th:value="${meibo.name}">
+            <input type="hidden" name="age" th:value="${meibo.age}">
+            <input type="hidden" name="sdate" th:value="${meibo.sdate}">
+            <input type="hidden" name="edate" th:value="${meibo.edate}">
+            <input type="hidden" name="password" th:value="${meibo.password}">
+            <button type="submit">更新</button>
+        </form>
+        <a href="/update1"><button>戻る</button></a>
+    </div>
+    <script src="/js/timer.js"></script>
+</body>
+<footer>
+    <div class="other"><h6>group2🄫2024</h6></div>
+</footer>
+</html>

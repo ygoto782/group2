@@ -127,7 +127,7 @@
                 </table>
             </div>
             <div class="d-right">
-                <a href="#" onclick="handleDelete(); return false;" class="delete-button">削除</a>
+                <a href="/delete1" onclick="handleDelete(); return false;" class="delete-button">削除</a>
             </div>
         </div>
     </div>
