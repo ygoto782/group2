@@ -32,10 +32,6 @@
                 <div>パスワード</div>
                 <input type="password" th:value="${meibo.password}" readonly>
             </div>
-			<div class="linkBox1">
-			    <div>パスワード確認</div>
-			    <input type="password" th:value="${confirmPassword}" readonly>
-			</div>
             <div class="linkBox1">
                 <div>開始日</div>
                 <input type="text" th:value="${meibo.sdate}" readonly>

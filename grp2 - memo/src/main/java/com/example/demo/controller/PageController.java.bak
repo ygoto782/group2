@@ -78,9 +78,7 @@ public class PageController {
 
     // 更新内容を確認するためのメソッド
     @PostMapping("/update1")
-    public String update1Submit(HttpSession session, Model model, 
-                                 @ModelAttribute MeiboForm meiboForm, 
-                                 @RequestParam String confirmPassword) { // confirmPasswordを受け取る
+    public String update1Submit(HttpSession session, Model model, @ModelAttribute MeiboForm meiboForm) {
         String userName = (String) session.getAttribute("userName"); // セッションからユーザー名を取得
 
         Meibo meibo = new Meibo(); // 新しいMeiboオブジェクトを作成
@@ -93,11 +91,9 @@ public class PageController {
 
         model.addAttribute("userName", userName); // モデルにユーザー名を追加
         model.addAttribute("meibo", meibo); // モデルにMeiboオブジェクトを追加
-        model.addAttribute("confirmPassword", confirmPassword); // confirmPasswordをモデルに追加
 
         return "update2"; // 確認画面へ遷移
     }
-
 
     // 更新を確定するためのメソッド
     @PostMapping("/updateConfirm")

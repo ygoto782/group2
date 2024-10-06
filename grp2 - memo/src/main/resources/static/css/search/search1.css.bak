@@ -163,11 +163,3 @@ tr.selected {
 tr:not(.selected) {
     background-color: #ffffff;
 }
-.selected {
-    background-color: #e0f7fa;
-}
-.no-results {
-    color: red;
-    text-align: center;
-    margin: 20px 0;
-}

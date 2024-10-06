@@ -39,12 +39,4 @@ public class LoginController {
             return new ModelAndView("login", "error", "無効なIDまたはパスワードです"); // エラーメッセージを表示
         }
     }
-
-    // ゲストログイン処理を行うメソッド
-    @GetMapping("/login/guest")
-    public ModelAndView guestLogin(HttpSession session) {
-        session.setAttribute("userId", 0L); // ゲストユーザーのIDを0に設定
-        session.setAttribute("userName", "ゲスト"); // ゲストユーザー名を設定
-        return new ModelAndView("redirect:/main1"); // メインページへリダイレクト
-    }
 }

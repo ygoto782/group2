@@ -4,13 +4,13 @@ import java.time.LocalDate; // 日付を扱うためのクラスをインポー�
 import java.time.format.DateTimeParseException; // 日付解析例外をインポート
 import java.util.List; // リストを扱うためのクラスをインポート
 
-import jakarta.servlet.http.HttpSession; // HTTPセッションを扱うためのクラスをインポート
+import org.springframework.beans.factory.annotation.Autowired; // HTTPセッションを扱うためのクラスをインポート
+import org.springframework.stereotype.Controller; // 自動的に依存性注入を行うためのアノテーションをインポート
+import org.springframework.ui.Model; // コントローラー層を示すアノテーションをインポート
+import org.springframework.web.bind.annotation.GetMapping; // モデルを扱うためのクラスをインポート
+import org.springframework.web.bind.annotation.RequestParam; // GETリクエストの処理を行うアノテーションをインポート
 
-import org.springframework.beans.factory.annotation.Autowired; // 自動的に依存性注入を行うためのアノテーションをインポート
-import org.springframework.stereotype.Controller; // コントローラー層を示すアノテーションをインポート
-import org.springframework.ui.Model; // モデルを扱うためのクラスをインポート
-import org.springframework.web.bind.annotation.GetMapping; // GETリクエストの処理を行うアノテーションをインポート
-import org.springframework.web.bind.annotation.RequestParam; // リクエストパラメータを取得するためのアノテーションをインポート
+import jakarta.servlet.http.HttpSession; // リクエストパラメータを取得するためのアノテーションをインポート
 
 // 検索機能を担当するコントローラー
 @Controller
@@ -38,7 +38,7 @@ public class SearchController {
         model.addAttribute("userName", userName);
 
         // 入力チェックと変換
-        String errorMessage = validateInputs(id, ageStart, ageEnd, sdateStart, sdateEnd, edateStart, edateEnd);
+        String errorMessage = validateInputs(ageStart, ageEnd, sdateStart, sdateEnd, edateStart, edateEnd);
 
         if (errorMessage != null) {
             model.addAttribute("meiboList", null); // 結果リストをnullに設定
@@ -52,7 +52,6 @@ public class SearchController {
                 LocalDate sdateEndLocal = sdateEnd != null ? LocalDate.parse(sdateEnd) : null;
                 LocalDate edateStartLocal = edateStart != null ? LocalDate.parse(edateStart) : null;
                 LocalDate edateEndLocal = edateEnd != null ? LocalDate.parse(edateEnd) : null;
-
                 // 検索を実行し、結果を取得
                 results = searchService.search(id, name, ageStart, ageEnd, sdateStartLocal, sdateEndLocal, edateStartLocal, edateEndLocal);
                 model.addAttribute("meiboList", results); // 結果をモデルに追加
@@ -68,17 +67,11 @@ public class SearchController {
     }
 
     // 入力チェックを行うメソッド
-    private String validateInputs(Long id, Integer ageStart, Integer ageEnd, String sdateStart, String sdateEnd, String edateStart, String edateEnd) {
-        // 社員IDチェック
-        if (id != null && id < 0) {
-            return "社員IDは数値のみを許可します。"; // 社員IDのエラーメッセージ
-        }
-
+    private String validateInputs(Integer ageStart, Integer ageEnd, String sdateStart, String sdateEnd, String edateStart, String edateEnd) {
         // 年齢の範囲チェック
         if (ageStart != null && ageEnd != null && ageStart > ageEnd) {
             return "年齢の範囲が無効です。"; // 年齢の範囲が不正な場合のエラーメッセージ
         }
-
         // 開始日と終了日の範囲チェック
         try {
             if (sdateStart != null && sdateEnd != null && LocalDate.parse(sdateStart).isAfter(LocalDate.parse(sdateEnd))) {
@@ -90,33 +83,6 @@ public class SearchController {
         } catch (DateTimeParseException e) {
             return "日付の形式が無効です。"; // 日付の形式が不正な場合のエラーメッセージ
         }
-
-        // 日付形式チェック
-        if (sdateStart != null && !isValidDateFormat(sdateStart)) {
-            return "開始日の形式はyyyy/MM/ddである必要があります。";
-        }
-        if (sdateEnd != null && !isValidDateFormat(sdateEnd)) {
-            return "終了日の形式はyyyy/MM/ddである必要があります。";
-        }
-        if (edateStart != null && !isValidDateFormat(edateStart)) {
-            return "終了日（開始）の形式はyyyy/MM/ddである必要があります。";
-        }
-        if (edateEnd != null && !isValidDateFormat(edateEnd)) {
-            return "終了日（終了）の形式はyyyy/MM/ddである必要があります。";
-        }
-
         return null; // 問題がなければnullを返す
-    }
-
-
-
-    // 日付形式が正しいかどうかをチェックするメソッド
-    private boolean isValidDateFormat(String date) {
-        try {
-            LocalDate.parse(date); // ここで日付を解析してみる
-            return true; // 正しい形式の場合
-        } catch (DateTimeParseException e) {
-            return false; // 不正な形式の場合
-        }
     }
 }

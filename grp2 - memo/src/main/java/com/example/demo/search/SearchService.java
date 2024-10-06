@@ -5,6 +5,7 @@ import java.util.ArrayList; // ArrayListを使用するためのインポート
 import java.util.List; // リストを扱うためのクラスをインポート
 
 import org.springframework.beans.factory.annotation.Autowired; // 自動的に依存性注入を行うためのアノテーションをインポート
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate; // JDBCを使ったデータベース操作を行うためのクラスをインポート
 import org.springframework.jdbc.core.RowMapper; // 結果セットをオブジェクトにマッピングするためのクラスをインポート
 import org.springframework.stereotype.Service; // サービス層を示すアノテーションをインポート
@@ -91,7 +92,7 @@ public class SearchService {
         // 構築したSQLクエリとパラメータでデータベースをクエリし、結果を返す
         try {
             return jdbcTemplate.query(sql.toString(), rowMapper, params.toArray()); // クエリを実行
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             // エラーハンドリングの追加
             throw new RuntimeException("検索中にエラーが発生しました", e); // エラーをスロー
         }
@@ -119,7 +120,7 @@ public class SearchService {
 
         try {
             return jdbcTemplate.queryForObject(sql, rowMapper, id); // クエリを実行し、1件を取得
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             // エラーハンドリングの追加
             throw new RuntimeException("指定されたIDの社員情報取得中にエラーが発生しました", e); // エラーをスロー
         }
@@ -142,7 +143,7 @@ public class SearchService {
                 meiboForm.getPassword(), // パスワード
                 meiboForm.getId() // ID
             );
-        } catch (Exception e) {
+        } catch (DataAccessException e) {
             // エラーハンドリングの追加
             throw new RuntimeException("社員情報の更新中にエラーが発生しました", e); // エラーをスロー
         }
