@@ -5,6 +5,25 @@
     <link rel="stylesheet" href="css/delete/delete1.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>削除</title>
+    <script src="/js/timer.js"></script>
+    <script>
+        function handleDelete(event) {
+            // フォーム内のselectedIdsを取得
+            const selectedIds = document.querySelector('input[name="selectedIds"]').value;
+
+            if (selectedIds === "") {
+                alert('削除するレコードが選択されていません。');
+                event.preventDefault(); // フォーム送信を防ぐ
+                return; // 処理を中断
+            }
+            // フォームを送信する
+            document.forms[0].submit();
+        }
+    
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </head>
 <body>
     <form action="/delete" method="post">
@@ -13,27 +32,26 @@
                 <div class="topMenu"><h3>社員情報削除</h3></div>
                 <div class="userBox">
                     <span th:text="${userName}">〇〇さん</span>
-            		<div id="dateTimer" class="date"></div>
+                    <div id="dateTimer" class="date"></div>
                 </div>
             </div>
             <div class="linkBox">
                 <div class="linkBox1">
                     <div>社員ID</div>
-                    <input type="text" name="selectedIds" th:value="${selectedIds}"> <!-- セッションから取得したIDを表示 -->
+                    <td>
+                        <input type="text" name="selectedIds" th:value="${selectedIds}" readonly> <!-- セッションから取得したIDを表示 -->
+                    </td>
                 </div>
             </div>
             <div class="message">こちらを削除します。よろしいですか？</div>
         </div>
         <div class="selectButton">
-            <input type="submit" value="削除する">
+            <button type="button" onclick="handleDelete(event)">削除する</button> <!-- type="button" に変更 -->
             <div><button type="button" onclick="goBack()">戻る</button></div>
         </div>
-   		<script src="/js/timer.js"></script>
-        <script>
-            function goBack() {
-                window.history.back();
-            }
-        </script>
     </form>
 </body>
+<footer>
+    <div class="other"><h6>group2🄫2024</h6></div>
+</footer>
 </html>

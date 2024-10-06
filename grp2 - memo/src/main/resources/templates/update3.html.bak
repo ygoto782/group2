@@ -21,10 +21,10 @@
         </div>
     </div>
     <div class="selectButton">
-        <a href="/main1"><button class="back">メニューへ</button></a> 
-        <a href="/search1"><button class="back">検索へ</button></a> 
+        <a href="/search1"><button class="back">検索へ</button></a>
+        <a href="/main1"><button class="back">戻る</button></a>
     </div>
-    <script src="/js/timer.js"></script>
+	<script src="/js/timer.js"></script>
 </body>
 <footer>
     <div class="other"><h6>group2🄫2024</h6></div>

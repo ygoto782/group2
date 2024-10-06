@@ -5,59 +5,83 @@
     <link rel="stylesheet" href="/css/search/search1.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>社員情報検索</title>
-    <script>
-        function getSelectedIds() {
-            const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            return Array.from(selectedCheckboxes).map(checkbox => checkbox.value).join(',');
-        }
+	<script>
+	    function getSelectedIds() {
+	        const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+	        return Array.from(selectedCheckboxes).map(checkbox => checkbox.value).join('');
+	    }
 
-        function handleDelete() {
-            const selectedIds = getSelectedIds();
-            console.log("Selected IDs:", selectedIds); // 選択されたIDをコンソールに出力
-            if (selectedIds) {
-                const deleteUrl = `/deleteConfirmation?selectedIds=${encodeURIComponent(selectedIds)}`;
-                console.log("Redirecting to:", deleteUrl); // リダイレクト先を確認
-                window.location.href = deleteUrl; // URLに遷移
-            } else {
-                alert('削除するレコードが選択されていません。');
-            }
-        }
+	    function handleDelete() {
+	        const selectedIds = getSelectedIds();
+	        if (selectedIds) {
+	            const deleteUrl = `/deleteConfirmation?selectedIds=${encodeURIComponent(selectedIds)}`;
+	            window.location.href = deleteUrl;
+	        } else {
+	            alert('削除するレコードが選択されていません。');
+	        }
+	    }
 
-        // 1行のみ選択可能にする関数
-        function handleRowClick(event) {
-            const row = event.currentTarget;
-            const checkbox = row.querySelector('input[type="checkbox"]');
-            if (checkbox) {
-                checkbox.checked = !checkbox.checked; // チェックボックスの状態を切り替え
-                // チェックボックスがチェックされているかどうかで背景色を変更
-                if (checkbox.checked) {
-                    row.classList.add('selected'); // チェックされている場合
-                } else {
-                    row.classList.remove('selected'); // チェックが外れた場合
-                }
-            }
-            // すべての行から選択状態を解除
-            const rows = document.querySelectorAll('tr');
-            rows.forEach(r => {
-                if (r !== row) {
-                    r.classList.remove('selected'); // 他の行の選択を解除
-                    const otherCheckbox = r.querySelector('input[type="checkbox"]');
-                    if (otherCheckbox) {
-                        otherCheckbox.checked = false; // 他の行のチェックを外す
-                    }
-                }
-            });
-        }
+	    function handleRowClick(event) {
+	        const row = event.currentTarget;
+	        const checkbox = row.querySelector('input[type="checkbox"]');
+	        if (checkbox) {
+	            checkbox.checked = !checkbox.checked;
+	            row.classList.toggle('selected', checkbox.checked);
+	        }
+	        document.querySelectorAll('tr').forEach(r => {
+	            if (r !== row) {
+	                r.classList.remove('selected');
+	                const otherCheckbox = r.querySelector('input[type="checkbox"]');
+	                if (otherCheckbox) {
+	                    otherCheckbox.checked = false;
+	                }
+	            }
+	        });
+	    }
 
-        function clearForm() {
-            document.getElementById('searchForm').reset();
-        }
-    </script>
-    <style>
-        .selected {
-            background-color: #e0f7fa; /* 選択された行の背景色 */
-        }
-    </style>
+	    function clearForm() {
+	        document.getElementById('searchForm').reset();
+	    }
+
+	    function validateInput() {
+	        const ageStart = document.getElementById('age_start').value;
+	        const ageEnd = document.getElementById('age_end').value;
+	        const sdateStart = document.getElementById('sdate_start').value;
+	        const sdateEnd = document.getElementById('sdate_end').value;
+	        const edateStart = document.getElementById('edate_start').value;
+	        const edateEnd = document.getElementById('edate_end').value;
+
+	        let errors = [];
+
+	        // 年齢相関チェック
+	        if (ageStart && ageEnd && parseInt(ageStart) > parseInt(ageEnd)) {
+	            errors.push('年齢の左側の値が右側の値を上回っています。');
+	        }
+
+	        // 開始日相関チェック
+	        if (sdateStart && sdateEnd && sdateStart > sdateEnd) {
+	            errors.push('開始日の左側の値が右側の値を上回っています。');
+	        }
+
+	        // 終了日相関チェック
+	        if (edateStart && edateEnd && edateStart > edateEnd) {
+	            errors.push('終了日の左側の値が右側の値を上回っています。');
+	        }
+
+	        return errors;
+	    }
+
+	    document.addEventListener('DOMContentLoaded', function() {
+	        document.getElementById('searchForm').onsubmit = function(event) {
+	            const errors = validateInput();
+	            if (errors.length > 0) {
+	                alert(errors.join('\n')); // ポップアップでエラーを表示
+	                event.preventDefault(); // 検索を行わない
+	            }
+	        };
+	    });
+	</script>
+
 </head>
 <body>
     <div class="header">
@@ -79,40 +103,40 @@
     <div class="main">
         <form id="searchForm" action="/search" method="get">
             <div class="onetwo">
-				<div class="t-left">
-				    <div class="end">
-				        <div class="end1">
-				            <div>
-				                <span>社員ID</span>
-				                <input class="te" type="text" name="id" id="id" pattern="\d*" title="数値のみ">
-				            </div>
-				            <div>
-				                <span>社員名</span>
-				                <input class="te" type="text" name="name" id="name">                            
-				            </div>
-				        </div>
-				        <div class="end2">
-				            <div>
-				                <span>年齢</span>
-				                <input class="te" type="text" name="age_start" id="age_start" pattern="\d*" title="数値のみ">
-				                <span>～</span>
-				                <input class="te" type="text" name="age_end" id="age_end" pattern="\d*" title="数値のみ">
-				            </div>
-				            <div>
-				                <span>開始日</span>
-				                <input class="te" type="text" name="sdate_start" id="sdate_start" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
-				                <span>～</span>
-				                <input class="te" type="text" name="sdate_end" id="sdate_end" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
-				            </div>
-				            <div>
-				                <span>終了日</span>
-				                <input class="te" type="text" name="edate_start" id="edate_start" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
-				                <span>～</span>
-				                <input class="te" type="text" name="edate_end" id="edate_end" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
-				            </div>
-				        </div>
-				    </div>
-				</div>
+                <div class="t-left">
+                    <div class="end">
+                        <div class="end1">
+                            <div>
+                                <span>社員ID</span>
+                                <input class="te" type="text" name="id" id="id" pattern="\d*" title="数値のみ">
+                            </div>
+                            <div>
+                                <span>社員名</span>
+                                <input class="te" type="text" name="name" id="name">                            
+                            </div>
+                        </div>
+                        <div class="end2">
+                            <div>
+                                <span>年齢</span>
+                                <input class="te" type="text" name="age_start" id="age_start" pattern="\d*" title="数値のみ">
+                                <span>～</span>
+                                <input class="te" type="text" name="age_end" id="age_end" pattern="\d*" title="数値のみ">
+                            </div>
+                            <div>
+                                <span>開始日</span>
+                                <input class="te" type="text" name="sdate_start" id="sdate_start" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
+                                <span>～</span>
+                                <input class="te" type="text" name="sdate_end" id="sdate_end" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
+                            </div>
+                            <div>
+                                <span>終了日</span>
+                                <input class="te" type="text" name="edate_start" id="edate_start" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
+                                <span>～</span>
+                                <input class="te" type="text" name="edate_end" id="edate_end" pattern="\d{4}/\d{2}/\d{2}" title="日付はyyyy/MM/dd形式で入力してください">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="t-right">
                     <div class="u-left">
                         <button type="submit" class="search-button">検索</button>
@@ -124,38 +148,42 @@
             </div>
         </form>
 
-        <!-- 件数表示 -->
         <div class="count">
             <span th:text="${count}">0</span>件
         </div>
 
-        <!-- 検索結果表示 -->
-        <div class="threefour">
-            <div class="d-left">
-                <table border="1">
-                    <tr class="th1">
-                        <th class="topbb"><input type="checkbox" value="0" checked disabled></th>
-                        <th>ID</th>
-                        <th>氏名</th>
-                        <th>年齢</th>
-                        <th>開始日</th>
-                        <th>終了日</th>
-                    </tr>
-                    <!-- 検索結果を表示するための行を追加 -->
-                    <tr th:each="meibo : ${meiboList}" onclick="handleRowClick(event)">
-                        <td><input type="checkbox" name="selectedIds" th:value="${meibo.id}" class="record-checkbox" onclick="event.stopPropagation();"></td>
-                        <td><a class="id-link" th:href="@{/update1(id=${meibo.id})}" th:text="${meibo.id}"></a></td>
-                        <td th:text="${meibo.name}"></td>
-                        <td th:text="${meibo.age}"></td>
-                        <td th:text="${meibo.sdate}"></td>
-                        <td th:text="${meibo.edate}"></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="d-right">
-                <a href="#" onclick="handleDelete(); return false;" class="delete-button">削除</a>
-            </div>
-        </div>
+		<div class="threefour">
+		    <div th:if="${errorMessage}" class="no-results">
+		        <span th:text="${errorMessage}"></span>
+		    </div>
+		    
+		    <div class="d-left">
+		        <table border="1">
+		            <tr class="th1">
+		                <th class="topbb"><input type="checkbox" value="" checked disabled></th>
+		                <th>ID</th>
+		                <th>氏名</th>
+		                <th>年齢</th>
+		                <th>開始日</th>
+		                <th>終了日</th>
+		            </tr>
+		            <tr th:each="meibo : ${meiboList}" onclick="handleRowClick(event)">
+		                <td><input type="checkbox" name="selectedIds" th:value="${meibo.id}" class="record-checkbox" onclick="event.stopPropagation();"></td>
+		                <td><a class="id-link" th:href="@{/update1(id=${meibo.id})}" th:text="${meibo.id}"></a></td>
+		                <td th:text="${meibo.name}"></td>
+		                <td th:text="${meibo.age}"></td>
+		                <td th:text="${meibo.sdate}"></td>
+		                <td th:text="${meibo.edate}"></td>
+		            </tr>
+		        </table>
+		        <div th:if="${count == 0}" class="no-results">
+		            該当のデータが見つかりません
+		        </div>
+		    </div>
+		    <div class="d-right">
+		        <a href="#" onclick="handleDelete(); return false;" class="delete-button">削除</a>
+		    </div>
+		</div>
     </div>
     <script src="/js/timer.js"></script>
 </body>
